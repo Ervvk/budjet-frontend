@@ -1,0 +1,40 @@
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+}
+body {
+  box-sizing: border-box;
+}
+html {
+  font-size: 65%;
+  @media screen and (min-width: 380px) {
+    font-size: 40%;
+  }
+
+  @media screen and (min-width: 750px) {
+    font-size: 50%;
+  }
+
+  @media screen and (min-width: 1300px) {
+    font-size: 62.5%;
+  }
+}
+:root {
+  --color-bg-bright: whitesmoke;
+  --color-bg-bright-b: rgb(255, 255, 255);
+  --color-bg-dark-b: #9fccf8;
+  --color-bg-dark: #123f73;
+  --color-bg-dark-d: #021232;
+
+  --color-border: rgba(186, 186, 186, 0.7);
+
+  --color-border-dark: rgba(112, 109, 109, 0.7);
+  --color-border-hl: rgb(96, 96, 187);
+
+  --color-font: #021232;
+  --color-font-bright: whitesmoke;
+  --color-font-color: #0f48a3;
+  --border-basic: 1px solid rgba(186, 186, 186, 0.7);
+  --border-radius: 6px;
+}

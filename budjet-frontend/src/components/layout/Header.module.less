@@ -1,0 +1,32 @@
+@import "/src/helpers/style/mixins.less";
+:global {
+  .ant-layout-header {
+    .flexSpacing(row);
+    width: 100%;
+    height: 70px;
+  }
+  .ant-menu {
+    width: min-content;
+    min-width: 55rem;
+    border-bottom: none;
+  }
+  .ant-menu-item {
+    color: var(--color-font);
+    font-size: 1.6rem;
+    letter-spacing: 0.5px;
+    //background: var(--color-bg-dark-d);
+  }
+  .ant-layout-header {
+    justify-content: space-between;
+    padding: 2rem 10rem;
+  }
+  .ant-layout-header,
+  .ant-menu,
+  .ant-menu.ant-menu-dark {
+    background: var(--color-bg-bright);
+  }
+  .ant-menu-item:hover,
+  .ant-menu-item:active {
+    background-color: rgb(219, 219, 225) !important;
+  }
+}

@@ -1,24 +1,17 @@
-import logo from "./logo.svg";
 import "./App.less";
+import "./App.module.less";
+import { Layout } from "antd";
+import Header from "./components/layout/Header";
+import Routes from "./pages/routes";
 
 function App() {
+  const { Content, Footer } = Layout;
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout className="layout">
+      <Header></Header>
+      <Content>{<Routes />}</Content>
+      <Footer style={{ textAlign: "center" }}></Footer>
+    </Layout>
   );
 }
 
