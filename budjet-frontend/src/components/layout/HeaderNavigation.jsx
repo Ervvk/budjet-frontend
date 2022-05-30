@@ -11,10 +11,10 @@ const HeaderNavigation = () => {
   return (
     <div className="header-navigation">
       <Menu mode="horizontal">
-        <Menu.Item key={"home"}>Home</Menu.Item>
-        <Menu.Item key={"transac"}>Transactions</Menu.Item>
-        <Menu.Item key={"cat"}>Categories</Menu.Item>
-        <Menu.Item key={"users"}>Users</Menu.Item>
+        <Menu.Item key={"home"}>Portfel</Menu.Item>
+        <Menu.Item key={"transac"}>Transakcje</Menu.Item>
+        <Menu.Item key={"cat"}>Kategorie</Menu.Item>
+        <Menu.Item key={"users"}>Użytkownicy</Menu.Item>
       </Menu>
       <span className="header-username">Hello, {userName}</span>
       <Button

@@ -15,7 +15,6 @@ const Header = () => {
 
   const logo = (
     <div className={{ display: "flex" }}>
-      <AiOutlineDollarCircle />
       <GiJetpack />
     </div>
   );
@@ -27,7 +26,7 @@ const Header = () => {
   return (
     <Header className="header">
       <div className="logo" onClick={handleLogoClick}>
-        <span>Budjet</span>
+        <span>BudJet</span>
         <span style={{ display: "inline-block" }}>{logo}</span>{" "}
       </div>
 

@@ -1,0 +1,26 @@
+@import "/src/helpers/style/mixins.less";
+.home {
+  .flexSpacing(column);
+  width: 150rem;
+  gap: 3rem;
+}
+.home-widgets {
+  width: 100%;
+  gap: 3rem;
+  display: flex;
+  justify-content: space-between;
+}
+.home-table {
+  background-color: #fff;
+  border-radius: 25px;
+  padding: 1rem;
+  padding-top: 2rem;
+
+  width: 100%;
+  &-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-left: 2rem;
+    padding: 1rem;
+  }
+}
