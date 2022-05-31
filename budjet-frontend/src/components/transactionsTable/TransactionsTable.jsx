@@ -4,35 +4,7 @@ import { Table, Button } from "antd";
 import "./TransactionsTable.less";
 import { fakeTransactions } from "../../state/fakeData";
 
-const columns = [
-  { title: "ID", dataIndex: "id" },
-  {
-    title: "Data",
-    dataIndex: "dateTime",
-  },
-  {
-    title: "Źródło",
-    dataIndex: "partner",
-  },
-  {
-    title: "Tytuł",
-    dataIndex: "title",
-  },
-  {
-    title: "Kategoria",
-    dataIndex: "category",
-  },
-  {
-    title: "Rodzaj",
-    dataIndex: "sign",
-  },
-  {
-    title: "Kwota",
-    dataIndex: "value",
-  },
-];
-
-const TransactionsTable = () => {
+const TransactionsTable = ({ tableData, tableColumns }) => {
   const transactionsData = fakeTransactions;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -65,8 +37,8 @@ const TransactionsTable = () => {
       ></div>
       <Table
         rowSelection={rowSelection}
-        columns={columns}
-        dataSource={transactionsData}
+        columns={tableColumns}
+        dataSource={tableData}
       />
     </div>
   );
