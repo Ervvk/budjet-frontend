@@ -1,17 +1,14 @@
 import React from "react";
-import TransactionsTable from "../../components/transactionsTable/TransactionsTable";
 import { fakeCategories } from "../../state/fakeData";
-import { categoriesRows } from "../../components/tablesSchemas";
+import { categoriesRows } from "../../components/CustomTable/tablesSchemas";
+import CustomTable from "../../components/CustomTable/CustomTable";
 
 const Categories = () => {
   return (
     <div className="transactions">
       <h1>Lista kategorii dostępnych dla użytkowników</h1>
       <div className="transactions-table-wrap"></div>
-      <TransactionsTable
-        tableColumns={categoriesRows}
-        tableData={fakeCategories}
-      />
+      <CustomTable tableColumns={categoriesRows} tableData={fakeCategories} />
     </div>
   );
 };

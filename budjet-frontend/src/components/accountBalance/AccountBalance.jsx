@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./AccountBalance.less";
 import { MdOutlineSavings } from "react-icons/md";
 import { Button } from "antd";
-import NewTransactionModal from "../newTransaction/NewTransactionModal";
+import NewTransactionModal from "../modals/NewTransactionModal";
 
 const AccountBalance = () => {
   const balance = 1200.5;

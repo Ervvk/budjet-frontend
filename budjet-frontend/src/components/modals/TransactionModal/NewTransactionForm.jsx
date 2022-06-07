@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Form, Input, InputNumber } from "antd";
-
+import "../NewTransaction.less";
+import "../NewTransaction.module.less";
 const NewTransactionForm = () => {
   const layout = {
     labelCol: {
@@ -35,6 +36,17 @@ const NewTransactionForm = () => {
       onFinish={onFinish}
       validateMessages={validateMessages}
     >
+      <Form.Item
+        name={["user", "name"]}
+        label="Data "
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
       <Form.Item
         name={["user", "name"]}
         label="Tytuł"

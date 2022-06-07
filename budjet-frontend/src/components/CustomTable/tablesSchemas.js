@@ -1,5 +1,4 @@
 export const transactionsRows = [
-  { title: "ID", dataIndex: "id" },
   {
     title: "Data",
     dataIndex: "dateTime",
@@ -21,25 +20,19 @@ export const transactionsRows = [
     dataIndex: "sign",
   },
   {
+    sort: true,
     title: "Kwota",
     dataIndex: "value",
+    sorter: (a, b) => a.value - b.value,
   },
 ];
 export const categoriesRows = [
-  {
-    title: "ID",
-    dataIndex: "id",
-  },
   {
     title: "Nazwa",
     dataIndex: "name",
   },
 ];
 export const usersRows = [
-  {
-    title: "ID",
-    dataIndex: "id",
-  },
   {
     title: "Login",
     dataIndex: "login",

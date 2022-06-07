@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import AccountBalance from "../../components/accountBalance/AccountBalance";
 import AccountStats from "../../components/accountStats/AccountStats";
-import TransactionsTable from "../../components/transactionsTable/TransactionsTable";
+import CustomTable from "../../components/CustomTable/CustomTable";
 import "./Home.less";
 
 import { fakeTransactions } from "../../state/fakeData";
-import { transactionsRows } from "../../components/tablesSchemas";
+import { transactionsRows } from "../../components/CustomTable/tablesSchemas";
+
 const Home = () => {
   return (
     <div className="home">
@@ -15,7 +16,7 @@ const Home = () => {
       </div>
       <div className="home-table">
         <span className="home-table-title">Ostatnie wydatki</span>
-        <TransactionsTable
+        <CustomTable
           tableColumns={transactionsRows}
           tableData={fakeTransactions}
         />

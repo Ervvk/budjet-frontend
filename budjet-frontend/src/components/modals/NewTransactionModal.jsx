@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Modal } from "antd";
-import NewTransactionForm from "./NewTransactionForm";
+import NewTransactionForm from "./TransactionModal/NewTransactionForm";
 
 const NewTransactionModal = ({ isVisible, handleModalClose }) => {
   const [isModalVisible, setIsModalVisible] = useState(isVisible);
