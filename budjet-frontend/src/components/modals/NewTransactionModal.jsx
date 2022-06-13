@@ -24,6 +24,8 @@ const NewTransactionModal = ({ isVisible, handleModalClose }) => {
       visible={isModalVisible}
       onOk={handleOk}
       onCancel={handleCancel}
+      okText="Potwierdź"
+      cancelText="Anuluj"
     >
       <NewTransactionForm />
     </Modal>

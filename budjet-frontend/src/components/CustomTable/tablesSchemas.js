@@ -29,7 +29,7 @@ export const transactionsRows = [
 export const categoriesRows = [
   {
     title: "Nazwa",
-    dataIndex: "name",
+    dataIndex: "title",
   },
 ];
 export const usersRows = [
@@ -39,7 +39,7 @@ export const usersRows = [
   },
   {
     title: "Imię",
-    dataIndex: "name",
+    dataIndex: "userName",
   },
   {
     title: "Nazwisko",

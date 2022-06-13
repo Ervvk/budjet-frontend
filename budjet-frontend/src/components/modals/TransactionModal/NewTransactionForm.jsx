@@ -1,8 +1,26 @@
-import React from "react";
-import { Button, Form, Input, InputNumber } from "antd";
+import React, { useEffect } from "react";
+import { Form, Input, InputNumber, DatePicker, Select } from "antd";
+import { validateMessages } from "../../../helpers/functions/validate";
 import "../NewTransaction.less";
 import "../NewTransaction.module.less";
-const NewTransactionForm = () => {
+import { fakeCategories } from "../../../state/fakeData";
+import moment from "moment";
+const { Option } = Select;
+
+const NewTransactionForm = ({ initialData }) => {
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue(
+      initialData?.dateTime
+        ? {
+            ...initialData,
+            dateTime: moment(initialData?.dateTime, "YYYY-MM-DD"),
+          }
+        : initialData
+    );
+  }, [form, initialData]);
+
   const layout = {
     labelCol: {
       span: 8,
@@ -11,19 +29,6 @@ const NewTransactionForm = () => {
       span: 16,
     },
   };
-  /* eslint-disable no-template-curly-in-string */
-
-  const validateMessages = {
-    required: "${label} is required!",
-    types: {
-      email: "${label} is not a valid email!",
-      number: "${label} is not a valid number!",
-    },
-    number: {
-      range: "${label} must be between ${min} and ${max}",
-    },
-  };
-  /* eslint-enable no-template-curly-in-string */
 
   const onFinish = (values) => {
     console.log(values);
@@ -32,23 +37,24 @@ const NewTransactionForm = () => {
   return (
     <Form
       {...layout}
+      form={form}
       name="nest-messages"
       onFinish={onFinish}
       validateMessages={validateMessages}
     >
       <Form.Item
-        name={["user", "name"]}
-        label="Data "
+        name="dateTime"
+        label="Data transakcji"
         rules={[
           {
             required: true,
           },
         ]}
       >
-        <Input />
+        <DatePicker style={{ width: "100%" }} />
       </Form.Item>
       <Form.Item
-        name={["user", "name"]}
+        name="title"
         label="Tytuł"
         rules={[
           {
@@ -59,18 +65,7 @@ const NewTransactionForm = () => {
         <Input />
       </Form.Item>
       <Form.Item
-        name={["user", "email"]}
-        label="Źródło"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name={["user", "email"]}
+        name="category"
         label="Kategoria"
         rules={[
           {
@@ -78,11 +73,19 @@ const NewTransactionForm = () => {
           },
         ]}
       >
-        <Input />
+        <Select>
+          {fakeCategories?.map((category) => {
+            return (
+              <Option key={category.key} value={category.key}>
+                {category.title}
+              </Option>
+            );
+          })}
+        </Select>
       </Form.Item>
       <Form.Item
-        name={["user", "email"]}
-        label="Rodzaj"
+        name="partner"
+        label="Do/od kogo"
         rules={[
           {
             required: true,
@@ -92,13 +95,28 @@ const NewTransactionForm = () => {
         <Input />
       </Form.Item>
       <Form.Item
-        name={["user", "age"]}
+        name="sign"
+        label="Typ transakcji"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <Select>
+          {" "}
+          <Option value="+">Dochód</Option>
+          <Option value="-">Wydatek</Option>
+        </Select>
+      </Form.Item>
+      <Form.Item
+        name="value"
         label="Kwota"
         rules={[
           {
             type: "number",
-            min: 1,
-            max: 99000,
+            min: 10,
+            max: 100000,
             required: true,
           },
         ]}

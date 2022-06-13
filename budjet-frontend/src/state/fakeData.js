@@ -45,7 +45,7 @@ export const fakeUsers = [
     key: "1",
     email: "email@email.com",
     login: "jano29",
-    name: "Jon",
+    userName: "Jon",
     surname: "User",
     permission: "user",
     isActive: "true",
@@ -55,7 +55,7 @@ export const fakeUsers = [
     key: "2",
     email: "email@email.com",
     login: "anna123",
-    name: "Anna",
+    userName: "Anna",
     surname: "Normalna-Userka",
     permission: "user",
     isActive: "true",
@@ -65,7 +65,7 @@ export const fakeUsers = [
     key: "3",
     email: "email@email.com",
     login: "raf22",
-    name: "Andrei",
+    userName: "Andrei",
     surname: "Adminov",
     permission: "admin",
     isActive: "true",
@@ -74,10 +74,10 @@ export const fakeUsers = [
 ];
 
 export const fakeCategories = [
-  { key: "1", name: "jedzenie" },
-  { key: "2", name: "media" },
-  { key: "3", name: "pozostałe opłaty " },
-  { key: "4", name: "zdrowie i uroda" },
-  { key: "5", name: "rozrywka" },
-  { key: "6", name: "inne" },
+  { key: "1", title: "jedzenie" },
+  { key: "2", title: "media" },
+  { key: "3", title: "pozostałe opłaty " },
+  { key: "4", title: "zdrowie i uroda" },
+  { key: "5", title: "rozrywka" },
+  { key: "6", title: "inne" },
 ];
