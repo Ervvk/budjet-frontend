@@ -1,7 +1,9 @@
+import moment from "moment";
 export const transactionsRows = [
   {
     title: "Data",
     dataIndex: "dateTime",
+    sorter: (a, b) => moment(a.dateTime).unix() - moment(b.dateTime).unix(),
   },
   {
     title: "Źródło",
@@ -30,12 +32,14 @@ export const categoriesRows = [
   {
     title: "Nazwa",
     dataIndex: "title",
+    sorter: (a, b) => a.title.localeCompare(b.title),
   },
 ];
 export const usersRows = [
   {
     title: "Login",
     dataIndex: "login",
+    sorter: (a, b) => a.login.localeCompare(b.login),
   },
   {
     title: "Imię",
@@ -44,6 +48,11 @@ export const usersRows = [
   {
     title: "Nazwisko",
     dataIndex: "surname",
+    sorter: (a, b) => a.surname.localeCompare(b.surname),
+  },
+  {
+    title: "Adres e-mail",
+    dataIndex: "email",
   },
 
   {

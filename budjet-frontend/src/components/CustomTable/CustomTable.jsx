@@ -7,27 +7,18 @@ import UpdateCategoriesForm from "../modals/CategoriesModal/UpdateCategoriesForm
 import UpdateUsersForm from "../modals/UsersModal/UpdateUsersForm";
 import NewTransactionForm from "../modals/TransactionModal/NewTransactionForm";
 
-const CustomTable = ({ tableData, tableColumns, isEditable, datasetName }) => {
+const CustomTable = ({
+  tableData,
+  tableColumns,
+  isEditable,
+  datasetName,
+  handleDeleteRecord,
+  handleEditRecord,
+}) => {
   const [modalSchema, setModalSchema] = useState(<></>);
-
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingRecord, setEditingRecord] = useState(null);
-  const [dataSource, setDataSource] = useState(tableData);
 
-  const onAddRecord = () => {
-    const randomNumber = parseInt(Math.random() * 1000);
-    const newRecord = {
-      id: randomNumber,
-      name: "Name " + randomNumber,
-      email: randomNumber + "@gmail.com",
-      address: "Address " + randomNumber,
-    };
-    setDataSource((pre) => {
-      return [...pre, newRecord];
-    });
-  };
   const onDeleteRecord = (record) => {
     Modal.confirm({
       title: "Czy na pewno chcesz usunąć ten rekord?",
@@ -35,9 +26,7 @@ const CustomTable = ({ tableData, tableColumns, isEditable, datasetName }) => {
       cancelText: "Anuluj",
       okType: "danger",
       onOk: () => {
-        setDataSource((pre) => {
-          return pre.filter((record) => record.id !== record.id);
-        });
+        handleDeleteRecord(record);
       },
     });
   };
@@ -52,7 +41,12 @@ const CustomTable = ({ tableData, tableColumns, isEditable, datasetName }) => {
         setModalSchema(<UpdateUsersForm initialData={{ ...record }} />);
         break;
       case "transactions":
-        setModalSchema(<NewTransactionForm initialData={{ ...record }} />);
+        setModalSchema(
+          <NewTransactionForm
+            initialData={{ ...record }}
+            handleAction={handleEditRecord}
+          />
+        );
         break;
       default:
         break;
@@ -94,14 +88,6 @@ const CustomTable = ({ tableData, tableColumns, isEditable, datasetName }) => {
         ]
       : []),
   ];
-  const start = () => {
-    setLoading(true); // ajax request after empty completing
-
-    setTimeout(() => {
-      setSelectedRowKeys([]);
-      setLoading(false);
-    }, 1000);
-  };
 
   return (
     <div>
@@ -115,20 +101,8 @@ const CustomTable = ({ tableData, tableColumns, isEditable, datasetName }) => {
         title="Edytuj rekord"
         visible={isEditing}
         okText="Potwierdź"
-        cancelText="Anuluj"
+        footer={null}
         onCancel={() => {
-          resetEditing();
-        }}
-        onOk={() => {
-          setDataSource((pre) => {
-            return pre.map((record) => {
-              if (record.id === editingRecord.id) {
-                return editingRecord;
-              } else {
-                return record;
-              }
-            });
-          });
           resetEditing();
         }}
       >

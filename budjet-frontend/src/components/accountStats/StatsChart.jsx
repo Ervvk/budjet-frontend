@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+import React from "react";
 import { Bar } from "@ant-design/plots";
+import { fakeTransactions } from "../../state/fakeData";
 
 const StatsChart = () => {
   const data = [

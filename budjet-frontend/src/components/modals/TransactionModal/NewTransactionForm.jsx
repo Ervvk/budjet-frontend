@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Form, Input, InputNumber, DatePicker, Select } from "antd";
+import { Form, Input, InputNumber, DatePicker, Select, Button } from "antd";
 import { validateMessages } from "../../../helpers/functions/validate";
 import "../NewTransaction.less";
 import "../NewTransaction.module.less";
@@ -7,7 +7,7 @@ import { fakeCategories } from "../../../state/fakeData";
 import moment from "moment";
 const { Option } = Select;
 
-const NewTransactionForm = ({ initialData }) => {
+const NewTransactionForm = ({ initialData, handleAction }) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -31,7 +31,13 @@ const NewTransactionForm = ({ initialData }) => {
   };
 
   const onFinish = (values) => {
-    console.log(values);
+    let transactionFormatted = {
+      ...values,
+      dateTime: moment(values.dateTime).format("YYYY-MM-DD"),
+      key: initialData?.key,
+    };
+    handleAction(transactionFormatted);
+    form.resetFields();
   };
 
   return (
@@ -76,7 +82,7 @@ const NewTransactionForm = ({ initialData }) => {
         <Select>
           {fakeCategories?.map((category) => {
             return (
-              <Option key={category.key} value={category.key}>
+              <Option key={category.key} value={category.title}>
                 {category.title}
               </Option>
             );
@@ -115,13 +121,29 @@ const NewTransactionForm = ({ initialData }) => {
         rules={[
           {
             type: "number",
-            min: 10,
-            max: 100000,
+            min: 10.0,
+            max: 100000.0,
             required: true,
           },
         ]}
       >
-        <InputNumber />
+        <InputNumber precision={2} step={0.1} />
+      </Form.Item>
+      <Form.Item
+        wrapperCol={{
+          xs: {
+            span: 24,
+            offset: 0,
+          },
+          sm: {
+            span: 16,
+            offset: 8,
+          },
+        }}
+      >
+        <Button type="primary" htmlType="submit">
+          Potwierdź
+        </Button>
       </Form.Item>
     </Form>
   );

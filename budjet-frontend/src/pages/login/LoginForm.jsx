@@ -65,7 +65,7 @@ const LoginForm = () => {
         <Button type="primary" htmlType="submit" className="login-form-button">
           <NavLink to={"/"}> Log in</NavLink>
         </Button>
-        Or <a href="">register now!</a>
+        Or <a href="/register">register now!</a>
       </Form.Item>
     </Form>
   );

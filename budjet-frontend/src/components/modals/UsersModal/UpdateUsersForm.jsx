@@ -3,7 +3,6 @@ import { Form, Input, Select, Checkbox, Switch } from "antd";
 import { validateMessages } from "../../../helpers/functions/validate";
 import "../NewTransaction.less";
 import "../NewTransaction.module.less";
-import moment from "moment";
 
 const { Option } = Select;
 

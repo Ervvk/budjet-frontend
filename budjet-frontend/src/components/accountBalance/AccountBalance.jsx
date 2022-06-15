@@ -3,10 +3,14 @@ import "./AccountBalance.less";
 import { MdOutlineSavings } from "react-icons/md";
 import { Button } from "antd";
 import NewTransactionModal from "../modals/NewTransactionModal";
+import { useContext } from "react";
+import TransactionsContext from "../../state/TransactionsContext";
 
 const AccountBalance = () => {
-  const balance = 1200.5;
-  const currency = "pln";
+  const transactionsCtx = useContext(TransactionsContext);
+  const balance = transactionsCtx.balance;
+  console.log(typeof balance);
+  const currency = " pln";
   const [isModalVisible, setIsModalVisible] = useState(false);
   const openModal = () => {
     setIsModalVisible(true);
@@ -21,10 +25,10 @@ const AccountBalance = () => {
         <span className="balance-subtitle">Stan konta</span>
         <span
           className={`balance-value ${
-            balance > 0 ? "balance-value-plus" : "balance-value-minus"
+            balance >= 0 ? "balance-value-plus" : "balance-value-minus"
           }`}
         >
-          {balance > 0 ? `+${balance} ` : `-${balance} `}
+          {balance.toFixed(2)}
           <span className="balance-currency">{currency}</span>
         </span>
       </div>{" "}
