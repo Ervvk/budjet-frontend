@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./Login.less";
 import "./Login.module.less";
 //NAV LINK WOULD BE REPLACED BY PROPER LOG-IN CODE
 import { NavLink } from "react-router-dom";
+import { AuthContext } from "../../state/auth/authContext";
 
 const LoginForm = () => {
+  const authCtx = useContext(AuthContext);
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
+    //check z api
+    authCtx.login(values);
   };
 
   return (
@@ -51,19 +55,11 @@ const LoginForm = () => {
           placeholder="Password"
         />
       </Form.Item>
-      <Form.Item>
-        <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-
-        <a className="login-form-forgot" href="">
-          Forgot password
-        </a>
-      </Form.Item>
+      <Form.Item></Form.Item>
 
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">
-          <NavLink to={"/"}> Log in</NavLink>
+          Log in
         </Button>
         Or <a href="/register">register now!</a>
       </Form.Item>

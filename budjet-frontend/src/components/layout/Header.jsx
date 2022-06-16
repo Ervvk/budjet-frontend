@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout, Space } from "antd";
-import { AiOutlineDollarCircle } from "react-icons/ai";
 import { GiJetpack } from "react-icons/gi";
+import { AuthContext } from "../../state/auth/authContext";
 
 import "./Header.module.less";
 //import "./Header.less";
@@ -12,9 +12,10 @@ import HeaderNavigation from "./HeaderNavigation";
 const Header = () => {
   const { Header } = Layout;
   const navigate = useNavigate();
+  const authCtx = useContext(AuthContext);
 
   const logo = (
-    <div className={{ display: "flex" }}>
+    <div>
       <GiJetpack />
     </div>
   );
@@ -25,7 +26,7 @@ const Header = () => {
 
   return (
     <Header className="header">
-      <div className="logo" onClick={handleLogoClick}>
+      <div className="logo" onClick={authCtx.isLoggedIn && handleLogoClick}>
         <span>BudJet</span>
         <span style={{ display: "inline-block" }}>{logo}</span>{" "}
       </div>
