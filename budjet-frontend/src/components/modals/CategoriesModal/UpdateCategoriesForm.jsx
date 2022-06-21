@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input } from "antd";
+import { Form, Input, Button } from "antd";
 import { validateMessages } from "../../../helpers/functions/validate";
 import "../NewTransaction.less";
 import "../NewTransaction.module.less";
 
-const UpdateCategoriesForm = ({ initialData }) => {
+const UpdateCategoriesForm = ({ initialData, handleAction }) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -22,6 +22,8 @@ const UpdateCategoriesForm = ({ initialData }) => {
 
   const onFinish = (values) => {
     console.log(values);
+    form.resetFields();
+    handleAction(values);
   };
 
   return (
@@ -43,6 +45,9 @@ const UpdateCategoriesForm = ({ initialData }) => {
       >
         <Input />
       </Form.Item>
+      <Button type="primary" htmlType="submit">
+        Potwierdź
+      </Button>
     </Form>
   );
 };

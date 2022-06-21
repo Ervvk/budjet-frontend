@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
-import { Form, Input, Select, Checkbox, Switch } from "antd";
+import { Form, Input, Select, Checkbox, Switch, Button } from "antd";
 import { validateMessages } from "../../../helpers/functions/validate";
 import "../NewTransaction.less";
 import "../NewTransaction.module.less";
+import axios from "axios";
 
 const { Option } = Select;
 
-const UpdateUsersForm = ({ initialData }) => {
+const UpdateUsersForm = ({ initialData, handleAction }) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -24,6 +25,8 @@ const UpdateUsersForm = ({ initialData }) => {
 
   const onFinish = (values) => {
     console.log(values);
+    form.resetFields();
+    handleAction(values);
   };
 
   return (
@@ -69,7 +72,7 @@ const UpdateUsersForm = ({ initialData }) => {
         <Input />
       </Form.Item>
       <Form.Item
-        name="userName"
+        name="name"
         label="Imię"
         rules={[
           {
@@ -91,7 +94,7 @@ const UpdateUsersForm = ({ initialData }) => {
         <Input />
       </Form.Item>
       <Form.Item
-        name="permission"
+        name="userType"
         label="Typ usera"
         rules={[
           {
@@ -117,6 +120,9 @@ const UpdateUsersForm = ({ initialData }) => {
       >
         <Switch />
       </Form.Item>
+      <Button type="primary" htmlType="submit">
+        Potwierdź
+      </Button>
     </Form>
   );
 };

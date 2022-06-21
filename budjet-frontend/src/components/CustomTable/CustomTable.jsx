@@ -35,10 +35,20 @@ const CustomTable = ({
     setEditingRecord({ ...record });
     switch (datasetName) {
       case "categories":
-        setModalSchema(<UpdateCategoriesForm initialData={{ ...record }} />);
+        setModalSchema(
+          <UpdateCategoriesForm
+            initialData={{ ...record }}
+            handleAction={handleEditRecord}
+          />
+        );
         break;
       case "users":
-        setModalSchema(<UpdateUsersForm initialData={{ ...record }} />);
+        setModalSchema(
+          <UpdateUsersForm
+            initialData={{ ...record }}
+            handleAction={handleEditRecord}
+          />
+        );
         break;
       case "transactions":
         setModalSchema(

@@ -9,14 +9,46 @@ import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import TransactionsContext from "../../state/TransactionsContext";
+import { AuthContext } from "../../state/auth/authContext";
 
+import axios from "axios";
+import { useEffect } from "react";
+
+const fetchData = async (userID) => {
+  axios.defaults.baseURL = "http://budjet.pawelek2111.ct8.pl";
+  const params = {
+    method: "GET",
+    url: "/shared/getAllUserTransactions.php",
+    params: { userId: 2 },
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  try {
+    const result = await axios.request(params);
+    return result.data;
+  } catch (error) {
+    return error;
+  }
+};
 const Home = () => {
   const transactionsCtx = useContext(TransactionsContext);
   const transactionsData = transactionsCtx.transactions.reverse();
+  const authCtx = useContext(AuthContext);
+
+  useEffect(() => {
+    const getData = async () => {
+      const dbTransactions = await fetchData(authCtx.loggedUser.id);
+      if (dbTransactions.length > 0) {
+        transactionsCtx.getTransactions(dbTransactions);
+      }
+    };
+    getData();
+  }, []);
 
   const navigate = useNavigate();
   const handleTransactionsRedirect = () => {
-    navigate("transactions");
+    navigate("/transactions");
   };
   return (
     <div className="home">

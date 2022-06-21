@@ -12,10 +12,10 @@ const NewTransactionForm = ({ initialData, handleAction }) => {
 
   useEffect(() => {
     form.setFieldsValue(
-      initialData?.dateTime
+      initialData?.date
         ? {
             ...initialData,
-            dateTime: moment(initialData?.dateTime, "YYYY-MM-DD"),
+            date: moment(initialData?.date, "YYYY-MM-DD"),
           }
         : initialData
     );
@@ -33,7 +33,7 @@ const NewTransactionForm = ({ initialData, handleAction }) => {
   const onFinish = (values) => {
     let transactionFormatted = {
       ...values,
-      dateTime: moment(values.dateTime).format("YYYY-MM-DD"),
+      date: moment(values.date).format("YYYY-MM-DD"),
       key: initialData?.key,
     };
     handleAction(transactionFormatted);
@@ -49,7 +49,7 @@ const NewTransactionForm = ({ initialData, handleAction }) => {
       validateMessages={validateMessages}
     >
       <Form.Item
-        name="dateTime"
+        name="date"
         label="Data transakcji"
         rules={[
           {
@@ -90,7 +90,7 @@ const NewTransactionForm = ({ initialData, handleAction }) => {
         </Select>
       </Form.Item>
       <Form.Item
-        name="partner"
+        name="source"
         label="Do/od kogo"
         rules={[
           {
@@ -101,7 +101,7 @@ const NewTransactionForm = ({ initialData, handleAction }) => {
         <Input />
       </Form.Item>
       <Form.Item
-        name="sign"
+        name="type"
         label="Typ transakcji"
         rules={[
           {
@@ -111,17 +111,17 @@ const NewTransactionForm = ({ initialData, handleAction }) => {
       >
         <Select>
           {" "}
-          <Option value="+">Dochód</Option>
-          <Option value="-">Wydatek</Option>
+          <Option value="income">Dochód</Option>
+          <Option value="outgoing">Wydatek</Option>
         </Select>
       </Form.Item>
       <Form.Item
-        name="value"
+        name="amount"
         label="Kwota"
         rules={[
           {
             type: "number",
-            min: 10.0,
+            min: 1.0,
             max: 100000.0,
             required: true,
           },

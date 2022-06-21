@@ -6,12 +6,12 @@ import { fakeTransactions } from "./fakeData";
 const countBalance = (transactions) => {
   let balance = 0;
   transactions.forEach((transaction) => {
-    const parsedValue = parseFloat(transaction.value);
+    const parsedValue = parseFloat(transaction.amount);
 
-    if (transaction.sign === "+") {
+    if (transaction.type === "income") {
       balance += parsedValue;
     }
-    if (transaction.sign === "-") {
+    if (transaction.type === "outgoing") {
       balance -= parsedValue;
     }
   });
@@ -20,7 +20,7 @@ const countBalance = (transactions) => {
 };
 
 const initialState = {
-  transactions: fakeTransactions,
+  transactions: [],
   balance: countBalance(fakeTransactions),
 };
 
@@ -30,13 +30,17 @@ const TransactionsReducer = (state, action) => {
 
   switch (action.type) {
     case "add":
-      action.transaction.key = `${parseInt(state.transactions.at(-1).key) + 1}`;
-      let parsedValue = parseFloat(action?.transaction?.value);
+      action.transaction.key =
+        state.transactions.length > 0
+          ? `${parseInt(state.transactions.at(-1).key) + 1}`
+          : "0";
+      let parsedValue = parseFloat(action?.transaction?.amount);
       updatedTransactions = [...state.transactions, action.transaction];
-      if (action.transaction.sign === "+") {
+      console.log(parsedValue);
+      if (action.transaction.type === "income") {
         updatedBalance += parsedValue;
       }
-      if (action.transaction.sign === "-") {
+      if (action.transaction.type === "outgoing") {
         updatedBalance -= parsedValue;
       }
       break;
@@ -46,10 +50,10 @@ const TransactionsReducer = (state, action) => {
         (transaction) => transaction.key !== action.transaction.key
       );
       let parsedVal = parseFloat(action.transaction.value);
-      if (action.transaction.sign === "+") {
+      if (action.transaction.type === "income") {
         updatedBalance -= parsedVal;
       }
-      if (action.transaction.sign === "-") {
+      if (action.transaction.type === "outgoing") {
         updatedBalance += parsedVal;
       }
 
@@ -60,16 +64,16 @@ const TransactionsReducer = (state, action) => {
         if (transaction.key === action.transaction.key) {
           newTransaction = {
             ...action.transaction,
-            userID: transaction.userID,
+            userId: transaction.userId,
           };
 
           if (transaction.value !== action.transaction.value) {
             let parsedVal = parseFloat(action.transaction.value);
-            if (action.transaction.sign === "+") {
-              updatedBalance += parsedVal - transaction.value;
+            if (action.transaction.type === "income") {
+              updatedBalance += parsedVal - transaction.amount;
             }
-            if (action.transaction.sign === "-") {
-              updatedBalance -= parsedVal + transaction.value;
+            if (action.transaction.sign === "outgoing") {
+              updatedBalance -= parsedVal + transaction.amount;
             }
           }
         }
@@ -77,6 +81,13 @@ const TransactionsReducer = (state, action) => {
         return newTransaction;
       });
 
+      break;
+    case "get":
+      console.log(action.transactions);
+      updatedTransactions = action.transactions.map((transaction) => {
+        return { ...transaction, key: transaction.id };
+      });
+      updatedBalance = countBalance(updatedTransactions);
       break;
     default:
       return updatedTransactions;
@@ -97,6 +108,9 @@ function TransactionsProvider(props) {
   const editSelectedTransaction = (transaction) => {
     dispatchTransactionAction({ type: "edit", transaction: transaction });
   };
+  const getTransactions = (transactions) => {
+    dispatchTransactionAction({ type: "get", transactions: transactions });
+  };
 
   const [TransactionsState, dispatchTransactionAction] = useReducer(
     TransactionsReducer,
@@ -116,6 +130,7 @@ function TransactionsProvider(props) {
     addTransaction: addTransactionToList,
     deleteTransaction: deleteTransaction,
     editTransaction: editSelectedTransaction,
+    getTransactions: getTransactions,
   };
 
   return (

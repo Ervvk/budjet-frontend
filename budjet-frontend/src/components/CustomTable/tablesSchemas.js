@@ -1,13 +1,18 @@
 import moment from "moment";
 export const transactionsRows = [
   {
+    title: "User",
+    dataIndex: "userId",
+    sorter: (a, b) => a.userId - b.userId,
+  },
+  {
     title: "Data",
-    dataIndex: "dateTime",
-    sorter: (a, b) => moment(a.dateTime).unix() - moment(b.dateTime).unix(),
+    dataIndex: "date",
+    sorter: (a, b) => moment(a.date).unix() - moment(b.date).unix(),
   },
   {
     title: "Źródło",
-    dataIndex: "partner",
+    dataIndex: "source",
   },
   {
     title: "Tytuł",
@@ -19,13 +24,13 @@ export const transactionsRows = [
   },
   {
     title: "Rodzaj",
-    dataIndex: "sign",
+    dataIndex: "type",
   },
   {
     sort: true,
     title: "Kwota",
-    dataIndex: "value",
-    sorter: (a, b) => a.value - b.value,
+    dataIndex: "amount",
+    sorter: (a, b) => a.amount - b.amount,
   },
 ];
 export const categoriesRows = [
@@ -43,7 +48,7 @@ export const usersRows = [
   },
   {
     title: "Imię",
-    dataIndex: "userName",
+    dataIndex: "name",
   },
   {
     title: "Nazwisko",
@@ -57,6 +62,6 @@ export const usersRows = [
 
   {
     title: "Typ użytkownika",
-    dataIndex: "permission",
+    dataIndex: "userType",
   },
 ];

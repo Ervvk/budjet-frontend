@@ -8,7 +8,19 @@ import Pages from "./pages/Pages";
 import TransactionsProvider from "./state/TransactionsProvider";
 import { AuthContext } from "./state/auth/authContext";
 
+import { useAxios } from "./helpers/hooks/use-http";
 function App() {
+  /*
+  const { response, loading, error } = useAxios({
+    method: "GET",
+    url: "/admin/getAllUsersSorted.php",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+    },
+  });
+  */
+
   const navigate = useNavigate();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,12 +32,11 @@ function App() {
 
   const handleLogin = useCallback(
     (loginPayload) => {
+      console.log(loginPayload);
       setIsLoggedIn(true);
       setLoggedUser({
         ...loginPayload,
         role: "user",
-        name: "Stefan",
-        surname: "Mittwoch",
       });
       navigate("/", { replace: true });
     },

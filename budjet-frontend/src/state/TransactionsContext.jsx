@@ -6,6 +6,7 @@ const TransactionsContext = React.createContext({
   addTransaction: (item) => {},
   editTransaction: (item) => {},
   deleteTransaction: (item) => {},
+  getTransactions: (items) => {},
 });
 
 export default TransactionsContext;
