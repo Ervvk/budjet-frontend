@@ -18,9 +18,7 @@ const NewTransactionModal = ({
   const handleTransactionAdd = async (transaction) => {
     addTransaction(transaction, authCtx.loggedUser.id);
     handleModalClose();
-    await handleRefresh.table();
-    await handleRefresh.balance();
-    await handleRefresh.chart();
+    handleRefresh();
   };
 
   useEffect(() => {

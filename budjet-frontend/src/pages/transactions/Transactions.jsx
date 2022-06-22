@@ -21,9 +21,7 @@ const Transactions = () => {
 
   const getTransAsync = async () => {
     const fetchedData = await getAllTransactions(userId, userRole);
-    if (fetchedData.length > 0) {
-      setTransactions(fetchedData);
-    }
+    setTransactions(fetchedData);
   };
   const handleTransactionDelete = async (deletedItem) => {
     await deleteTransaction(deletedItem, userId);

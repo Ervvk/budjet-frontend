@@ -24,17 +24,17 @@ const Home = () => {
   const [chartData, setChartData] = useState([]);
   const [walletBalance, setWalletBalance] = useState(0);
 
-  const getTableData = useCallback(async () => {
+  const getTableData = async () => {
     const dbTransactions = await getAllTransactions(userId, userRole);
-    if (dbTransactions.length > 0) {
-      const topTransactions = dbTransactions
-        .sort((a, b) => moment(b.date).unix() - moment(a.date).unix())
-        .slice(0, 5);
-      setTransactions(topTransactions);
-    }
-  }, [userId, userRole]);
 
-  const getChartData = useCallback(async () => {
+    const topTransactions = dbTransactions
+      .sort((a, b) => moment(b.date).unix() - moment(a.date).unix())
+      .slice(0, 5);
+
+    setTransactions(topTransactions);
+  };
+
+  const getChartData = async () => {
     const fetchedData = await getAllTransactions(userId, userRole);
 
     let separatedData = { incomes: [], outgoings: [] };
@@ -56,18 +56,21 @@ const Home = () => {
       }
     });
     setChartData(separatedData);
-  }, [userId, userRole]);
+  };
 
-  const getBalance = useCallback(async () => {
+  const getBalance = async () => {
     const walletBalance = await getUserWallet(userId);
     setWalletBalance(walletBalance);
-  }, [userId]);
+  };
+  const updateAll = async () => {
+    await getChartData();
+    await getBalance();
+    await getTableData();
+  };
 
   useEffect(() => {
-    getChartData();
-    getBalance();
-    getTableData();
-  }, [getChartData, getBalance, getTableData]);
+    updateAll();
+  }, []);
 
   const navigate = useNavigate();
   const handleTransactionsRedirect = () => {
@@ -76,14 +79,7 @@ const Home = () => {
   return (
     <div className="home">
       <div className="home-widgets">
-        <AccountBalance
-          balance={walletBalance}
-          updateFunctions={{
-            table: getTableData,
-            chart: getChartData,
-            balance: getBalance,
-          }}
-        />
+        <AccountBalance balance={walletBalance} updateFunctions={updateAll} />
         <AccountStats chartData={chartData} />
       </div>
       <div className="home-table">
