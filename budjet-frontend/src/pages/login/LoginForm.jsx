@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./Login.less";
 import "./Login.module.less";
 import axios from "axios";
-//NAV LINK WOULD BE REPLACED BY PROPER LOG-IN CODE
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../state/auth/authContext";
-
+import { API_URL } from "../../helpers/functions/http";
 const LoginForm = () => {
+  const navigate = useNavigate();
   const fetchData = async (inputValues) => {
-    axios.defaults.baseURL = "http://budjet.pawelek2111.ct8.pl";
+    axios.defaults.baseURL = API_URL;
     const params = {
       method: "POST",
       url: "/login.php",
@@ -36,14 +36,20 @@ const LoginForm = () => {
 
     const res = await fetchData(values);
     if (res === "incorrectLogin") {
-      console.log("błędny login lub hasło");
+      message.error("Błędny login lub hasło!");
       return;
     }
-    if (res.active) {
+    if (res.active === "1") {
       authCtx.login(res);
     } else {
-      //error message
+      message.error("Ten user nie jest aktywny!");
     }
+  };
+  const handleRegisterOpen = () => {
+    navigate("/register");
+  };
+  const handleFaqOpen = () => {
+    navigate("/faq");
   };
 
   return (
@@ -66,7 +72,7 @@ const LoginForm = () => {
       >
         <Input
           prefix={<UserOutlined className="site-form-item-icon" />}
-          placeholder="Username"
+          placeholder="Login"
           className="login-form-input"
         />
       </Form.Item>
@@ -83,16 +89,20 @@ const LoginForm = () => {
           prefix={<LockOutlined />}
           className="login-form-input"
           type="password"
-          placeholder="Password"
+          placeholder="Hasło"
         />
       </Form.Item>
       <Form.Item></Form.Item>
 
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">
-          Log in
+          Zaloguj się
         </Button>
-        Or <a href="/register">register now!</a>
+
+        <div style={{ width: "90%", display: "flex", gap: "1rem" }}>
+          <Button onClick={handleRegisterOpen}>Zarejestruj się</Button>
+          <Button onClick={handleFaqOpen}>F A Q</Button>
+        </div>
       </Form.Item>
     </Form>
   );

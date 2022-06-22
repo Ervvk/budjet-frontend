@@ -1,8 +1,6 @@
-import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import { Layout, Space } from "antd";
 import { GiJetpack } from "react-icons/gi";
-import { AuthContext } from "../../state/auth/authContext";
 
 import "./Header.module.less";
 //import "./Header.less";
@@ -11,8 +9,6 @@ import HeaderNavigation from "./HeaderNavigation";
 
 const Header = () => {
   const { Header } = Layout;
-  const navigate = useNavigate();
-  const authCtx = useContext(AuthContext);
 
   const logo = (
     <div>
@@ -20,13 +16,9 @@ const Header = () => {
     </div>
   );
 
-  const handleLogoClick = () => {
-    navigate("/", { replace: true });
-  };
-
   return (
     <Header className="header">
-      <div className="logo" onClick={authCtx.isLoggedIn && handleLogoClick}>
+      <div className="logo">
         <span>BudJet</span>
         <span style={{ display: "inline-block" }}>{logo}</span>{" "}
       </div>

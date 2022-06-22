@@ -1,13 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, InputNumber, DatePicker, Select, Button } from "antd";
 import { validateMessages } from "../../../helpers/functions/validate";
 import "../NewTransaction.less";
 import "../NewTransaction.module.less";
-import { fakeCategories } from "../../../state/fakeData";
 import moment from "moment";
+import { getAllCategories } from "../../../state/CategoriesHttp";
 const { Option } = Select;
 
 const NewTransactionForm = ({ initialData, handleAction }) => {
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    const get = async () => {
+      const fetchedCategories = await getAllCategories();
+      setCategories(fetchedCategories);
+    };
+    get();
+  }, []);
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -16,6 +24,7 @@ const NewTransactionForm = ({ initialData, handleAction }) => {
         ? {
             ...initialData,
             date: moment(initialData?.date, "YYYY-MM-DD"),
+            amount: parseFloat(initialData.amount),
           }
         : initialData
     );
@@ -35,6 +44,7 @@ const NewTransactionForm = ({ initialData, handleAction }) => {
       ...values,
       date: moment(values.date).format("YYYY-MM-DD"),
       key: initialData?.key,
+      userId: initialData?.userId,
     };
     handleAction(transactionFormatted);
     form.resetFields();
@@ -80,10 +90,10 @@ const NewTransactionForm = ({ initialData, handleAction }) => {
         ]}
       >
         <Select>
-          {fakeCategories?.map((category) => {
+          {categories?.map((category) => {
             return (
-              <Option key={category.key} value={category.title}>
-                {category.title}
+              <Option key={category.key} value={category.name}>
+                {category.name}
               </Option>
             );
           })}

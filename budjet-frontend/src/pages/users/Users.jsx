@@ -1,94 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { fakeUsers } from "../../state/fakeData";
 import { usersRows } from "../../components/CustomTable/tablesSchemas";
 import CustomTable from "../../components/CustomTable/CustomTable";
 import { Button, Modal } from "antd";
 import UpdateUsersForm from "../../components/modals/UsersModal/UpdateUsersForm";
-import axios from "axios";
-const fetchAdd = async (inputValues) => {
-  axios.defaults.baseURL = "http://budjet.pawelek2111.ct8.pl";
-  const params = {
-    method: "POST",
-    url: "/admin/addUserByAdmin.php",
-    params: { ...inputValues },
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-  try {
-    const result = await axios.request(params);
-    return result.data;
-  } catch (error) {
-    return error;
-  }
-};
-const fetchdelete = async (inputValues, userID) => {
-  console.log("idk:", userID);
-  axios.defaults.baseURL = "http://budjet.pawelek2111.ct8.pl";
-  const params = {
-    method: "POST",
-    url:
-      inputValues.type === "income"
-        ? "/user/deleteIncome.php"
-        : "/user/deleteOutgoing.php",
-    params: { id: inputValues.id },
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-  try {
-    const result = await axios.request(params);
-    return result.data;
-  } catch (error) {
-    return error;
-  }
-};
-
-const fetchEdit = async (userID, inputValues) => {
-  console.log("idk:", userID);
-  axios.defaults.baseURL = "http://budjet.pawelek2111.ct8.pl";
-  const params = {
-    method: "POST",
-    url: "/admin/editUserDataByAdmin.php",
-    params: { ...inputValues },
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-  try {
-    const result = await axios.request(params);
-    return result.data;
-  } catch (error) {
-    return error;
-  }
-};
-const fetchAll = async () => {
-  axios.defaults.baseURL = "http://budjet.pawelek2111.ct8.pl";
-  const params = {
-    method: "GET",
-    url: "/admin/getAllUsersSorted.php",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-  try {
-    const result = await axios.request(params);
-    return result.data;
-  } catch (error) {
-    return error;
-  }
-};
-
+import { useContext } from "react";
+import { AuthContext } from "../../state/auth/authContext";
+import {
+  addUser,
+  deleteUser,
+  editUser,
+  getAllUsers,
+} from "../../state/usersHttp";
 const Users = () => {
+  const authContext = useContext(AuthContext);
+
   const [users, setUsers] = useState([]);
+  const getData = async () => {
+    const usersData = await getAllUsers();
+    const usersDataFormatted = usersData.map((user) => {
+      return { ...user, key: user.id };
+    });
+    setUsers(usersDataFormatted);
+  };
+
   useEffect(() => {
-    const getData = async () => {
-      const usersData = await fetchAll();
-      const usersDataFormatted = usersData.map((user) => {
-        return { ...user, key: user.id };
-      });
-      setUsers(usersDataFormatted);
-    };
     getData();
   }, []);
 
@@ -100,13 +35,17 @@ const Users = () => {
     setIsModalVisible(false);
   };
 
-  const handleUserDelete = () => {};
+  const handleUserDelete = async (values) => {
+    await deleteUser(values.id);
+    getData();
+  };
   const handleUserEdit = async (values) => {
-    fetchEdit(values);
+    await editUser(values);
+    getData();
   };
   const handleUserAdd = async (values) => {
-    await fetchAdd(values);
-    fetchAll();
+    await addUser(values);
+    getData();
   };
   return (
     <div className="transactions">

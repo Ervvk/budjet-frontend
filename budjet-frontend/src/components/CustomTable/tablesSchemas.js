@@ -30,14 +30,20 @@ export const transactionsRows = [
     sort: true,
     title: "Kwota",
     dataIndex: "amount",
-    sorter: (a, b) => a.amount - b.amount,
+    sorter: (a, b) => a?.amount - b?.amount,
+    render: (a) => a.toFixed(2),
   },
 ];
 export const categoriesRows = [
   {
+    title: "Id",
+    dataIndex: "id",
+    sorter: (a, b) => a.id.localeCompare(b.id),
+  },
+  {
     title: "Nazwa",
-    dataIndex: "title",
-    sorter: (a, b) => a.title.localeCompare(b.title),
+    dataIndex: "name",
+    sorter: (a, b) => a.name.localeCompare(b.name),
   },
 ];
 export const usersRows = [

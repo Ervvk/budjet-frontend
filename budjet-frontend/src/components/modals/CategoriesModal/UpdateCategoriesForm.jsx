@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Form, Input, Button } from "antd";
 import { validateMessages } from "../../../helpers/functions/validate";
 import "../NewTransaction.less";
@@ -21,9 +21,13 @@ const UpdateCategoriesForm = ({ initialData, handleAction }) => {
   };
 
   const onFinish = (values) => {
-    console.log(values);
+    const formData = { name: values.name };
+
+    if (initialData?.id) {
+      formData.id = initialData.id;
+    }
+    handleAction(formData);
     form.resetFields();
-    handleAction(values);
   };
 
   return (
@@ -35,7 +39,7 @@ const UpdateCategoriesForm = ({ initialData, handleAction }) => {
       validateMessages={validateMessages}
     >
       <Form.Item
-        name="title"
+        name="name"
         label="Nazwa kategorii"
         rules={[
           {

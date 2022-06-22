@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
-import { Form, Input, Select, Checkbox, Switch, Button } from "antd";
+import { Form, Input, Select, Switch, Button } from "antd";
 import { validateMessages } from "../../../helpers/functions/validate";
 import "../NewTransaction.less";
 import "../NewTransaction.module.less";
-import axios from "axios";
 
 const { Option } = Select;
 
@@ -24,9 +23,8 @@ const UpdateUsersForm = ({ initialData, handleAction }) => {
   };
 
   const onFinish = (values) => {
-    console.log(values);
     form.resetFields();
-    handleAction(values);
+    handleAction({ ...values, key: initialData?.key });
   };
 
   return (
@@ -60,17 +58,19 @@ const UpdateUsersForm = ({ initialData, handleAction }) => {
       >
         <Input />
       </Form.Item>
-      <Form.Item
-        name="password"
-        label="Hasło"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
+      {!initialData && (
+        <Form.Item
+          name="password"
+          label="Hasło"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+      )}
       <Form.Item
         name="name"
         label="Imię"
@@ -109,7 +109,7 @@ const UpdateUsersForm = ({ initialData, handleAction }) => {
       </Form.Item>
 
       <Form.Item
-        name="isActive"
+        name="active"
         label="Aktywny"
         valuePropName="checked"
         rules={[

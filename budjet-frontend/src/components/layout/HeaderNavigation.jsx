@@ -2,28 +2,39 @@ import React, { useContext } from "react";
 import { Button } from "antd";
 import { PoweroffOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 import "./Header.module.less";
 import "./Header.less";
 import { AuthContext } from "../../state/auth/authContext";
+import { useEffect } from "react";
 
 const HeaderNavigation = () => {
+  const location = useLocation();
   const authCtx = useContext(AuthContext);
   const loggedUser = authCtx.loggedUser;
 
   const handleLogout = () => {
     authCtx.logout();
   };
+  useEffect(() => {
+    if (location.pathname.includes("transactions")) {
+    }
+  }, [location]);
+
   return (
     <div className="header-navigation">
-      <Menu mode="horizontal">
+      <Menu mode="horizontal" defaultSelectedKeys={["home"]}>
         {loggedUser.role === "admin" && (
           <>
-            <Menu.Item key={"transac"}>
+            {" "}
+            <Menu.Item key={"home"}>
+              <NavLink to={"/"}>Witaj</NavLink>
+            </Menu.Item>
+            <Menu.Item key={"transactions"}>
               <NavLink to={"transactions"}>Transakcje</NavLink>
             </Menu.Item>
-            <Menu.Item key={"cat"}>
+            <Menu.Item key={"categories"}>
               <NavLink to={"categories"}>Kategorie</NavLink>
             </Menu.Item>
             <Menu.Item key={"users"}>
@@ -33,10 +44,14 @@ const HeaderNavigation = () => {
         )}
         {loggedUser.role === "user" && (
           <>
+            {" "}
             <Menu.Item key={"home"}>
+              <NavLink to={"/"}>Witaj</NavLink>
+            </Menu.Item>
+            <Menu.Item key={"dashboard"}>
               <NavLink to={"/dashboard"}>Portfel</NavLink>
             </Menu.Item>
-            <Menu.Item key={"transac"}>
+            <Menu.Item key={"transactions"}>
               <NavLink to={"transactions"}>Transakcje</NavLink>
             </Menu.Item>
           </>
@@ -47,7 +62,6 @@ const HeaderNavigation = () => {
           <span className="header-username">
             {`${loggedUser.name} ${loggedUser.surname}`}
           </span>
-
           <Button
             type="default"
             shape="circle"

@@ -8,6 +8,7 @@ import Users from "./users/Users";
 import UserSettings from "./userSettings/UserSettings";
 import Categories from "./categories/Categories";
 import Home from "./home/Home";
+import Faq from "./faq/Faq";
 
 import { AuthContext } from "../state/auth/authContext";
 
@@ -26,6 +27,7 @@ const Pages = () => {
     <Routes>
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
+      <Route path="faq" element={<Faq />} />
       <Route
         element={
           <ProtectedRoute

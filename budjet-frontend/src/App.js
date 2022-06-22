@@ -5,22 +5,10 @@ import "./App.module.less";
 import { Layout } from "antd";
 import Header from "./components/layout/Header";
 import Pages from "./pages/Pages";
-import TransactionsProvider from "./state/TransactionsProvider";
+
 import { AuthContext } from "./state/auth/authContext";
 
-import { useAxios } from "./helpers/hooks/use-http";
 function App() {
-  /*
-  const { response, loading, error } = useAxios({
-    method: "GET",
-    url: "/admin/getAllUsersSorted.php",
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/json",
-    },
-  });
-  */
-
   const navigate = useNavigate();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -32,11 +20,10 @@ function App() {
 
   const handleLogin = useCallback(
     (loginPayload) => {
-      console.log(loginPayload);
       setIsLoggedIn(true);
       setLoggedUser({
         ...loginPayload,
-        role: "user",
+        role: loginPayload.userType,
       });
       navigate("/", { replace: true });
     },
@@ -58,13 +45,11 @@ function App() {
   const { Content, Footer } = Layout;
   return (
     <AuthContext.Provider value={authValues}>
-      <TransactionsProvider>
-        <Layout className="layout">
-          <Header></Header>
-          <Content>{<Pages />}</Content>
-          <Footer style={{ textAlign: "center" }}></Footer>
-        </Layout>{" "}
-      </TransactionsProvider>
+      <Layout className="layout">
+        <Header></Header>
+        <Content>{<Pages />}</Content>
+        <Footer style={{ textAlign: "center" }}></Footer>
+      </Layout>{" "}
     </AuthContext.Provider>
   );
 }

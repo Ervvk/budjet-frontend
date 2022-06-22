@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import AccountBalance from "../../components/accountBalance/AccountBalance";
 import AccountStats from "../../components/accountStats/AccountStats";
 import CustomTable from "../../components/CustomTable/CustomTable";
@@ -8,43 +8,66 @@ import { transactionsRows } from "../../components/CustomTable/tablesSchemas";
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import TransactionsContext from "../../state/TransactionsContext";
 import { AuthContext } from "../../state/auth/authContext";
-
-import axios from "axios";
+import {
+  getAllTransactions,
+  getUserWallet,
+} from "../../state/TransactionsHttp";
 import { useEffect } from "react";
+import moment from "moment";
 
-const fetchData = async (userID) => {
-  axios.defaults.baseURL = "http://budjet.pawelek2111.ct8.pl";
-  const params = {
-    method: "GET",
-    url: "/shared/getAllUserTransactions.php",
-    params: { userId: 2 },
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-  try {
-    const result = await axios.request(params);
-    return result.data;
-  } catch (error) {
-    return error;
-  }
-};
 const Home = () => {
-  const transactionsCtx = useContext(TransactionsContext);
-  const transactionsData = transactionsCtx.transactions.reverse();
-  const authCtx = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
+  const userId = authContext.loggedUser.id;
+  const userRole = authContext.loggedUser.role;
+  const [transactions, setTransactions] = useState([]);
+  const [chartData, setChartData] = useState([]);
+  const [walletBalance, setWalletBalance] = useState(0);
+
+  const getTableData = useCallback(async () => {
+    const dbTransactions = await getAllTransactions(userId, userRole);
+    if (dbTransactions.length > 0) {
+      const topTransactions = dbTransactions
+        .sort((a, b) => moment(b.date).unix() - moment(a.date).unix())
+        .slice(0, 5);
+      setTransactions(topTransactions);
+    }
+  }, [userId, userRole]);
+
+  const getChartData = useCallback(async () => {
+    const fetchedData = await getAllTransactions(userId, userRole);
+
+    let separatedData = { incomes: [], outgoings: [] };
+
+    fetchedData.forEach((trans) => {
+      const getMonthYear = (date) => {
+        return date.getMonth() + "." + date.getFullYear();
+      };
+      const transDate = new Date(trans.date);
+      const current = new Date();
+      const monthYearTrans = getMonthYear(transDate);
+      const monthYearCur = getMonthYear(current);
+      if (monthYearTrans === monthYearCur) {
+        if (trans.type === "outgoing") {
+          separatedData.outgoings.push({ ...trans, month: monthYearTrans });
+        } else if (trans.type === "income") {
+          separatedData.incomes.push({ ...trans, month: monthYearTrans });
+        }
+      }
+    });
+    setChartData(separatedData);
+  }, [userId, userRole]);
+
+  const getBalance = useCallback(async () => {
+    const walletBalance = await getUserWallet(userId);
+    setWalletBalance(walletBalance);
+  }, [userId]);
 
   useEffect(() => {
-    const getData = async () => {
-      const dbTransactions = await fetchData(authCtx.loggedUser.id);
-      if (dbTransactions.length > 0) {
-        transactionsCtx.getTransactions(dbTransactions);
-      }
-    };
-    getData();
-  }, []);
+    getChartData();
+    getBalance();
+    getTableData();
+  }, [getChartData, getBalance, getTableData]);
 
   const navigate = useNavigate();
   const handleTransactionsRedirect = () => {
@@ -53,8 +76,15 @@ const Home = () => {
   return (
     <div className="home">
       <div className="home-widgets">
-        <AccountBalance />
-        <AccountStats />
+        <AccountBalance
+          balance={walletBalance}
+          updateFunctions={{
+            table: getTableData,
+            chart: getChartData,
+            balance: getBalance,
+          }}
+        />
+        <AccountStats chartData={chartData} />
       </div>
       <div className="home-table">
         <div className="home-table-heading">
@@ -65,7 +95,7 @@ const Home = () => {
         </div>
         <CustomTable
           tableColumns={transactionsRows}
-          tableData={transactionsData.filter((trans, idx) => idx < 5)}
+          tableData={transactions}
           isEditable={false}
           datasetName={""}
         />

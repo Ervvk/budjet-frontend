@@ -1,101 +1,49 @@
-import React, { useEffect } from "react";
-
+import React, { useEffect, useState } from "react";
 import "./Transactions.less";
 import { transactionsRows } from "../../components/CustomTable/tablesSchemas";
 import CustomTable from "../../components/CustomTable/CustomTable";
 import { useContext } from "react";
-import TransactionsContext from "../../state/TransactionsContext";
+
 import { AuthContext } from "../../state/auth/authContext";
 
-import axios from "axios";
-
-const fetchAll = async (userID, userRole) => {
-  axios.defaults.baseURL = "http://budjet.pawelek2111.ct8.pl";
-  const params = {
-    method: "GET",
-    url:
-      userRole === "admin"
-        ? "/shared/listAllTransactions.php"
-        : "/shared/getAllUserTransactions.php",
-    params: { userId: 2 },
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-  try {
-    const result = await axios.request(params);
-    return result.data;
-  } catch (error) {
-    return error;
-  }
-};
-
-const fetchData = async (inputValues, userID) => {
-  console.log("idk:", userID);
-  axios.defaults.baseURL = "http://budjet.pawelek2111.ct8.pl";
-  const params = {
-    method: "POST",
-    url: "/shared/editSingleTransaction.php",
-    params: { ...inputValues, userId: userID, id: inputValues.key },
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-  try {
-    const result = await axios.request(params);
-    return result.data;
-  } catch (error) {
-    return error;
-  }
-};
-
-const fetchDataDelete = async (inputValues, userID) => {
-  console.log("idk:", userID);
-  axios.defaults.baseURL = "http://budjet.pawelek2111.ct8.pl";
-  const params = {
-    method: "PUT",
-    url:
-      inputValues.type === "income"
-        ? "/user/deleteIncome.php"
-        : "/user/deleteOutgoing.php",
-    params: { id: inputValues.id },
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-  try {
-    const result = await axios.request(params);
-    return result.data;
-  } catch (error) {
-    return error;
-  }
-};
+import {
+  getAllTransactions,
+  editTransaction,
+  deleteTransaction,
+  getUserWallet,
+} from "../../state/TransactionsHttp";
 
 const Transactions = () => {
-  const transactionsCtx = useContext(TransactionsContext);
-  const transactionsData = transactionsCtx.transactions.reverse();
+  const [transactions, setTransactions] = useState([]);
   const authContext = useContext(AuthContext);
+  const userId = authContext.loggedUser.id;
+  const userRole = authContext.loggedUser.role;
 
-  const handleTransactionDelete = (deletedItem) => {
-    transactionsCtx.deleteTransaction(deletedItem);
+  const getTransAsync = async () => {
+    const fetchedData = await getAllTransactions(userId, userRole);
+    if (fetchedData.length > 0) {
+      setTransactions(fetchedData);
+    }
   };
-  const handleTransactionEdit = (updatedItem) => {
+  const handleTransactionDelete = async (deletedItem) => {
+    await deleteTransaction(deletedItem, userId);
+    getTransAsync();
+  };
+  const handleTransactionEdit = async (updatedItem) => {
     console.log(updatedItem);
-
-    transactionsCtx.editTransaction(updatedItem);
-    // do zmiany id
-    fetchData(updatedItem, 2);
+    await editTransaction(updatedItem, userId);
+    getTransAsync();
   };
 
   useEffect(() => {
-    const get = async () => {
-      const fetchedData = await fetchAll(2, authContext.loggedUser.role);
-      if (fetchedData.length > 0) {
-        transactionsCtx.getTransactions(fetchedData);
-      }
-    };
-    get();
+    getTransAsync();
   }, []);
+
+  useEffect(() => {
+    if (userRole === "user") {
+      getUserWallet(userId);
+    }
+  }, [transactions, userId, userRole]);
 
   return (
     <div className="transactions">
@@ -103,7 +51,7 @@ const Transactions = () => {
       <div className="transactions-table-wrap"></div>
       <CustomTable
         tableColumns={transactionsRows}
-        tableData={transactionsData}
+        tableData={transactions}
         isEditable={true}
         datasetName={"transactions"}
         handleDeleteRecord={handleTransactionDelete}

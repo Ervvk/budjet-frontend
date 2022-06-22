@@ -1,13 +1,41 @@
 import React from "react";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, message } from "antd";
 import "./Register.less";
+import axios from "axios";
+import { API_URL } from "../../helpers/functions/http";
 
-//NAV LINK WOULD BE REPLACED BY PROPER LOG-IN CODE
-import { NavLink } from "react-router-dom";
+const registerPost = async (inputValues) => {
+  axios.defaults.baseURL = API_URL;
+  const params = {
+    method: "GET",
+    url: "/register.php",
+    params: {
+      ...inputValues,
+    },
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  try {
+    const result = await axios.request(params);
+    if (typeof result.data == "string") return result.data;
+    else {
+      return "false";
+    }
+  } catch (error) {
+    return error;
+  }
+};
 
 const RegisterForm = () => {
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+  const onFinish = async (values) => {
+    const registerResponse = await registerPost(values);
+
+    if (registerResponse.includes("correctRegister")) {
+      message.success("Konto utworzone, możesz się zalogować");
+    } else {
+      message.error("Nie udało się utworzyć konta");
+    }
   };
 
   return (
@@ -54,7 +82,7 @@ const RegisterForm = () => {
         <Input />
       </Form.Item>
       <Form.Item
-        name="userName"
+        name="name"
         label="Imię"
         rules={[
           {
@@ -78,7 +106,7 @@ const RegisterForm = () => {
 
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">
-          <NavLink to={"/"}> Register</NavLink>
+          Zarejestruj się
         </Button>
       </Form.Item>
     </Form>

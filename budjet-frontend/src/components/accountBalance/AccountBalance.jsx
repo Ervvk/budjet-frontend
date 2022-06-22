@@ -3,13 +3,8 @@ import "./AccountBalance.less";
 import { MdOutlineSavings } from "react-icons/md";
 import { Button } from "antd";
 import NewTransactionModal from "../modals/NewTransactionModal";
-import { useContext } from "react";
-import TransactionsContext from "../../state/TransactionsContext";
 
-const AccountBalance = () => {
-  const transactionsCtx = useContext(TransactionsContext);
-  const balance = transactionsCtx.balance;
-  console.log(typeof balance);
+const AccountBalance = ({ updateFunctions, balance }) => {
   const currency = " pln";
   const [isModalVisible, setIsModalVisible] = useState(false);
   const openModal = () => {
@@ -18,6 +13,7 @@ const AccountBalance = () => {
   const closeModal = () => {
     setIsModalVisible(false);
   };
+
   return (
     <div className="balance">
       <div className="balance-content">
@@ -28,7 +24,7 @@ const AccountBalance = () => {
             balance >= 0 ? "balance-value-plus" : "balance-value-minus"
           }`}
         >
-          {balance.toFixed(2)}
+          {balance ? balance.toFixed(2) : 0}
           <span className="balance-currency">{currency}</span>
         </span>
       </div>{" "}
@@ -43,6 +39,7 @@ const AccountBalance = () => {
       <NewTransactionModal
         isVisible={isModalVisible}
         handleModalClose={closeModal}
+        handleRefresh={updateFunctions}
       />
     </div>
   );
