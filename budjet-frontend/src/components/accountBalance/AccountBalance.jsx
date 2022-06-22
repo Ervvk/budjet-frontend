@@ -24,7 +24,7 @@ const AccountBalance = ({ updateFunctions, balance }) => {
             balance >= 0 ? "balance-value-plus" : "balance-value-minus"
           }`}
         >
-          {balance ? balance.toFixed(2) : 0}
+          {balance.toFixed(2)}
           <span className="balance-currency">{currency}</span>
         </span>
       </div>{" "}

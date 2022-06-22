@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Modal } from "antd";
+import { Modal, message } from "antd";
 import NewTransactionForm from "./TransactionModal/NewTransactionForm";
 import { useContext } from "react";
 import { AuthContext } from "../../state/auth/authContext";
@@ -16,7 +16,14 @@ const NewTransactionModal = ({
   const [isModalVisible, setIsModalVisible] = useState(isVisible);
 
   const handleTransactionAdd = async (transaction) => {
-    addTransaction(transaction, authCtx.loggedUser.id);
+    const addResponse = await addTransaction(
+      transaction,
+      authCtx.loggedUser.id
+    );
+
+    if (typeof addResponse == "string" && addResponse?.includes("kredyt")) {
+      message.error("Przekroczyłeś limit kredytowy");
+    }
     handleModalClose();
     handleRefresh();
   };
